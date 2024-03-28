@@ -1,3 +1,9 @@
 signtool sign  /v  /s  PrivateCertStore  /n  Contoso.com(Test)  /t http://timestamp.digicert.com  /fd SHA256  cmdriver.sys
 
+
+maybe just:
+signtool sign /fd SHA256 cmdriver.sys
+
+
+
 Info: the cmake setup and build has to happen in the visual studio commandline.

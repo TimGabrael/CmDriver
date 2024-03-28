@@ -49,6 +49,9 @@ struct Driver {
             if(DeviceIoControl(this->driver_handle, IOCTL_DRIVER_GET_PROCESS_ID, &get_info, sizeof(get_info), &process_data, sizeof(process_data), &bytes_returned, nullptr)) {
                 return process_data.process_id;
             }
+            else {
+                std::cout << "failed to get process id" << std::endl;
+            }
         }
         return 0;
     }
@@ -62,6 +65,9 @@ struct Driver {
             DRIVER_MODULE_BASE module_data = {};
             if(DeviceIoControl(this->driver_handle, IOCTL_DRIVER_GET_MODULE_BASE, &get_base, sizeof(get_base), &module_data, sizeof(module_data), &bytes_returned, nullptr)) {
                 return module_data.module_base_ptr;
+            }
+            else {
+                std::cout << "failed to Get Module Base" << std::endl;
             }
         }
         return 0;
@@ -100,13 +106,13 @@ int main() {
     uint64_t proc_id_real = GetProcessIdByName("target_app.exe");
 
     Driver driver;
-    uint64_t proc_id = driver.GetProcessId(L"target_app.exe");
-    std::cout << std::hex << "proc_id: " << proc_id << std::endl;
-    uint64_t module_base = driver.GetModuleBase(proc_id_real, L"target_app.exe");
-    std::cout << std::hex << "module_base: " << module_base << std::endl;
 
     //uint32_t cur_value = 100;
     while(true) {
+        uint64_t proc_id = driver.GetProcessId(L"target_app.exe");
+        std::cout << std::hex << "proc_id: " << proc_id << std::endl;
+        uint64_t module_base = driver.GetModuleBase(proc_id_real, L"target_app.exe");
+        std::cout << std::hex << "module_base: " << module_base << std::endl;
         // the address (void*)0x0C22C8FF820 is probably not correct, change to whatever is seen in the target_app
         //if(driver.WriteProcessMemory(proc_id, (void*)0x0C22C8FF820, (void*)&cur_value, sizeof(uint32_t))) {
         //    std::cout << "yes" << std::endl;
